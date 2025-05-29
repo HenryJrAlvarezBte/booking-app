@@ -1,14 +1,14 @@
-import { IoMdClose } from 'react-icons/io';
+import { GrClose } from 'react-icons/gr';
 import { cn } from '../utils';
 
 function Menu({ children, openMenu, closeMenu }) {
 	return (
-		<div className={cn('menu -top-full', openMenu && 'top-0')}>
+		<div className={cn('menu top-full', openMenu && 'top-0')}>
 			<button
 				className="absolute top-3 right-5 p-1 md:hidden"
 				onClick={closeMenu}
 			>
-				<IoMdClose className="size-6" />
+				<GrClose className="size-5" />
 			</button>
 			{children}
 		</div>

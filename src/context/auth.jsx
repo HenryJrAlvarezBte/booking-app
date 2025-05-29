@@ -1,18 +1,17 @@
 import { create } from 'zustand';
 import api from '../services/api';
-
 const ls = window.localStorage;
 
 export const useAuth = create((set) => {
 	return {
-		user: JSON.parse(ls.getItem('user')),
-		token: ls.getItem('token'),
+		user: JSON.parse(ls.getItem('user')) || null,
+		token: ls.getItem('token') || null,
 		isAuth: !!ls.getItem('token'),
 		status: 'idle',
 		error: null,
+
 		login: async ({ email, password }) => {
 			set({ status: 'pending' });
-
 			try {
 				const res = await api.post('users/login', { email, password });
 				const { user, token } = res.data;
@@ -24,15 +23,16 @@ export const useAuth = create((set) => {
 					user,
 					token,
 					isAuth: true,
-					status: 'resolved',
+					status: 'resolved', // se completo la peticion
 					error: null,
 				});
 			} catch (error) {
 				set({
 					status: 'rejected',
-					error: error.response?.data?.message,
+					error: error.response?.data?.message || error.message,
 				});
 			}
+			return set({ state: 1 });
 		},
 
 		register: async ({ firstName, lastName, email, password, gender }) => {
@@ -58,8 +58,8 @@ export const useAuth = create((set) => {
 		},
 
 		logout: () => {
-			ls.removeItem('token');
-			ls.removeItem('user');
+			ls.removeItem('token'), ls.removeItem('user');
+
 			set({
 				user: null,
 				token: null,

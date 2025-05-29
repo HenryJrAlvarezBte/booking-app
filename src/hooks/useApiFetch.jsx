@@ -1,58 +1,40 @@
 import { useState } from 'react';
 import api from '../services/api';
-import { toast } from 'react-toastify'; // Importar react-toastify
 
 function useApiFetch() {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
-	async function fetchApi(url, method = 'GET', body = null) {
-		if (typeof url !== 'string') {
-			setError('URL must be a string');
-			toast.error('URL must be a string');
-			return;
-		}
-
+	async function fetchApi({ url, method = 'get', body = null }) {
 		setLoading(true);
-		setError(null);
-
 		try {
 			const res = await api({
 				url,
 				method: method.toUpperCase(),
-				data: method.toUpperCase() !== 'GET' ? body : undefined,
+				data: method !== 'GET' ? body : undefined,
 			});
 
-			toast.success('Request successful!');
-
 			switch (method.toUpperCase()) {
-				case 'POST': {
+				case 'POST':
 					setData((prev) => [...prev, res.data]);
 					break;
-				}
-				case 'DELETE': {
-					const id = parseInt(url.split('/').pop(), 10);
-					setData((prev) => prev.filter((item) => item.id !== id));
+				case 'DELETE':
+					{
+						const id = parseInt(url.split('/').pop());
+						setData((prev) => prev.filter((i) => i.id !== id));
+					}
 					break;
-				}
-				case 'GET': {
+				default:
 					setData(res.data);
 					break;
-				}
-				default: {
-					setData(res.data);
-					break;
-				}
 			}
-		} catch (err) {
-			setError(err.message || 'An error occurred');
-			toast.error(`Error: ${err.message || 'An error occurred'}`);
+		} catch (error) {
+			setError(error.message);
 		} finally {
 			setLoading(false);
 		}
 	}
-
 	return [data, fetchApi, loading, error];
 }
 

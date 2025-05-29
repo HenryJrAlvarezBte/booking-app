@@ -8,7 +8,6 @@ function Search({ setResult }) {
 		setResult(inputRef.current.value.trim().toLowerCase());
 		inputRef.current.value = '';
 	};
-
 	return (
 		<form onSubmit={handleSubmit} className="w-full md:w-fit">
 			<div className="input-form flex items-center gap-4">

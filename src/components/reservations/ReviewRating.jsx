@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaStar } from 'react-icons/fa';
+import { useState } from 'react';
+import { FaStar } from 'react-icons/fa6';
 import { cn } from '../../utils';
 
 function ReviewRating({ setReview }) {
@@ -7,23 +7,18 @@ function ReviewRating({ setReview }) {
 	const [hover, setHover] = useState(0);
 
 	const handleClick = (index) => {
-		setRating(index);
-		setReview((prevState) => {
-			return {
-				...prevState,
-				rating: index,
-			};
-		});
+		setReview((prevState) => ({
+			...prevState,
+			rating: index,
+		}));
 		setRating(0);
 		setHover(0);
 	};
-
 	const handleHover = (index) => {
 		setHover(index);
 	};
-
 	return (
-		<div className="flex gap-2">
+		<div className="flex gap-1">
 			{[...Array(5)].map((_, index) => (
 				<button
 					key={index + 1}
@@ -32,10 +27,7 @@ function ReviewRating({ setReview }) {
 					className="text-gray-400"
 				>
 					<FaStar
-						className={cn(
-							'text-3xl',
-							(hover > index || rating > index) && 'text-yellow-500',
-						)}
+						className={cn('text-3xl', hover > index && 'text-yellow-500')}
 					/>
 				</button>
 			))}

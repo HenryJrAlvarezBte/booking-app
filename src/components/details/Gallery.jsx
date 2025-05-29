@@ -1,7 +1,8 @@
 function Gallery({ hotel }) {
 	const images = hotel?.images || [];
+
 	return (
-		<div className="aspect-square rounded-lg grid grid-cols-4 grid-rows-2 gap-4 w-auto h-full">
+		<div className="aspect-square rounded-lg grid grid-cols-4 grid-rows-2">
 			<img
 				src={images[0]?.url}
 				alt={hotel?.name}
@@ -20,5 +21,4 @@ function Gallery({ hotel }) {
 		</div>
 	);
 }
-
 export default Gallery;

@@ -10,48 +10,49 @@ const initialState = {
 
 function Review({ hotelId, closeModal }) {
 	const [_, fetchReview] = useApiFetch();
-	const [review, setReview] = useState({ ...initialState, hotelId });
-	const [errorMessage, setErrorMessage] = useState('');
+	const [review, setReview] = useState(initialState);
+	const [error, setError] = useState(null); // Inicializamos el error como null
 
-	const handleSubmit = async () => {
+	const handleSubmit = () => {
+		// Validación de campos
 		const { comment, rating } = review;
-		if (!comment || rating === 0) {
-			return setErrorMessage('Please fill all the fields');
+
+		if (!review.comment || review.rating === 0) {
+			setError('Please fill all the fields');
+			return;
 		}
 
-		try {
-			await fetchReview({
-				url: '/reviews',
-				method: 'POST',
-				body: { ...review, hotelId },
-			});
-
-			setReview(initialState);
-			closeModal();
-		} catch (error) {
-			setErrorMessage('Failed to submit the review. Please try again.');
-		}
+		// Realizamos la solicitud
+		fetchReview({
+			url: '/reviews',
+			method: 'POST',
+			body: {
+				...review,
+				hotelId,
+			},
+		});
+		// Reiniciamos el estado
+		setReview(initialState);
+		closeModal();
 	};
 
 	return (
 		<div className="w-80">
 			<h2 className="text-2xl font-semibold mb-4">Review</h2>
 
-			{errorMessage && <div className="mb-4 text-red-500">{errorMessage}</div>}
-
 			<div className="mb-4">
 				<ReviewRating setReview={setReview} />
 			</div>
 
-			<div>Rating</div>
 			<textarea
-				className="input-form resize-none h-24"
+				className="input-form resize-none h-24 mb-4"
 				placeholder="Write your review here..."
 				value={review.comment}
 				onChange={(e) => setReview({ ...review, comment: e.target.value })}
-			/>
+			></textarea>
+			{error && <p className="error-validation mb-4">{error}</p>}
 
-			<button className="btn" onClick={handleSubmit}>
+			<button className="bnt" onClick={handleSubmit}>
 				Submit
 			</button>
 		</div>

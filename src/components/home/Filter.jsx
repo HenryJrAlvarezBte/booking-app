@@ -1,17 +1,20 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useHotels } from '../../context/hotels';
+import useApiFetch from '../../hooks/useApiFetch';
 
-function Filter() {
-	const { getCities, getHotelByCity, cities } = useHotels();
+function Filter({ setResult }) {
+	const { getByCity } = useHotels();
+	const [cities, getCities] = useApiFetch();
 	const selectRef = useRef();
-	const [result, setResult] = useState('');
 
 	useEffect(() => {
-		getCities();
-	}, [getCities]);
+		getCities({
+			url: '/cities',
+		});
+	}, []);
 
 	const handleChange = () => {
-		getHotelByCity(selectRef.current.value);
+		getByCity(selectRef.current.value);
 		setResult('');
 	};
 
@@ -20,7 +23,7 @@ function Filter() {
 			<select
 				ref={selectRef}
 				onChange={handleChange}
-				className="py-1 px-2 w-full focus:outline-none"
+				className="py-1 px-2 focus:outline-none"
 			>
 				<option value="">All cities</option>
 				{cities.map((city) => (
