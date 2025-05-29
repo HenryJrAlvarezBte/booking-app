@@ -1,5 +1,6 @@
-import { SlLocationPin } from 'react-icons/sl';
-import RatingStars from '../RatingStars';
+import React from 'react';
+import RatingStars from '../home/StarRating';
+import { IoLocationOutline } from 'react-icons/io5';
 
 function Description({ rating, address, description }) {
 	return (
@@ -9,10 +10,12 @@ function Description({ rating, address, description }) {
 				<span className="text-sm">{rating}</span>
 			</div>
 			<p className="flex items-center gap-1 mb-4">
-				<SlLocationPin /> <span className="text-xs">{address}</span>
+				<IoLocationOutline />
+				<span className="text-xs">{address}</span>
 			</p>
 			<p>{description}</p>
 		</div>
 	);
 }
+
 export default Description;

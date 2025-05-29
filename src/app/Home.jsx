@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHotels } from '../context/hotels';
-import HotelsList from '../components/home/HotelsList';
 import Search from '../components/home/Search';
-import { MdOutlineFilterAlt } from 'react-icons/md';
+import HotelsList from '../components/HotelsList';
 import Filter from '../components/home/Filter';
 import Menu from '../components/Menu';
+import { FiFilter } from 'react-icons/fi';
+
 function Home() {
 	const { hotels, getAll } = useHotels();
 	const [result, setResult] = useState('');
@@ -14,29 +15,37 @@ function Home() {
 		if (hotels.length === 0) {
 			getAll();
 		}
-	}, []);
+	}, [hotels.length, getAll]);
 
-	const filtered = hotels?.filter((hotel) =>
-		hotel?.name.toLowerCase().includes(result),
+	useEffect(() => {
+		localStorage.setItem('hotels', JSON.stringify(hotels));
+	}, [hotels]);
+
+	const filtered = hotels.filter((hotel) =>
+		hotel.name.toLowerCase().includes(result.toLowerCase()),
 	);
 
 	const handleToggle = () => {
-		setOpenMenu(!openMenu);
+		setOpenMenu((prev) => !prev);
 	};
 
 	return (
 		<div>
 			<section className="max-w-5xl mx-auto px-5 py-10">
-				<div className="mb-8 flex items-center justify-center gap-4">
+				<div className="mb-8">
 					<Search setResult={setResult} />
 					<button className="md:hidden" onClick={handleToggle}>
-						<MdOutlineFilterAlt className="size-8" />
+						<FiFilter className="size-6" />
 					</button>
-					<Menu openMenu={openMenu} closeMenu={handleToggle}>
-						<Filter setResult={setResult} />
+					<Menu openMenu={openMenu} closeMenu={handleToggle} className="">
+						<Filter />
 					</Menu>
 				</div>
-				<HotelsList hotels={filtered} />
+				{filtered.length > 0 ? (
+					<HotelsList hotels={filtered} />
+				) : (
+					<p className="text-center">No hotels found.</p>
+				)}
 			</section>
 		</div>
 	);

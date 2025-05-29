@@ -1,3 +1,4 @@
+import React from 'react';
 import RelatedCard from './RelatedCard';
 
 function RelatedList({ related }) {
@@ -8,7 +9,7 @@ function RelatedList({ related }) {
 			))}
 
 			{related?.length === 0 && (
-				<p className="font-semibold text-center">No related hotels found</p>
+				<p className="font-semibold text-center">No related hotels found.</p>
 			)}
 		</div>
 	);

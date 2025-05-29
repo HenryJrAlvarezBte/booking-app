@@ -9,10 +9,12 @@ function Modal({ children, openModal, closeModal }) {
 			)}
 		>
 			<div
-				className="absolute top-0 left-0 w-full bg-black/50"
+				className="absolute top-0 left-0 w-full h-full bg-black/50"
 				onClick={closeModal}
 			/>
-			<div className="relative bg-white p-9 rounded-lg">{children}</div>
+			<div className="relative bg-white p-9 rounded-lg shadow-lg">
+				{children}
+			</div>
 		</div>
 	);
 }

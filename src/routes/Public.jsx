@@ -5,6 +5,7 @@ function Public({ children }) {
 	const { isAuth } = useAuth();
 
 	if (isAuth) return <Navigate to="/" />;
+
 	return children ? children : <Outlet />;
 }
 

@@ -1,84 +1,96 @@
-import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router';
+import * as z from 'zod';
+import { useAuth } from '../../context/auth';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const schema = z.object({
-	firstName: z.string().min(2),
-	lastName: z.string().min(2),
-	email: z.string().email(),
-	password: z.string().min(6),
-	gender: z.enum(['male', 'female', 'other'], { message: 'select a genre' }),
+	firstName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres.'),
+	lastName: z.string().min(2, 'El apellido debe tener al menos 2 caracteres.'),
+	email: z.string().email('Debe ser un correo electrónico válido.'),
+	password: z
+		.string()
+		.min(6, 'La contraseña debe tener al menos 6 caracteres.'),
+	gender: z.enum(
+		['male', 'female', 'other'],
+		'Debe seleccionar un género válido.',
+	),
 });
+
 function RegisterForm() {
 	const { register: createUser } = useAuth();
 	const navigate = useNavigate();
+
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
 		reset,
-	} = useForm({ resolver: zodResolver(schema) });
+	} = useForm({
+		resolver: zodResolver(schema),
+	});
 
-	const onSubmit = (dataForm) => {
-		createUser(dataForm);
-		reset();
-		toast('Your account has been created successfully🥳');
-		navigate('/login');
+	const onSubmit = async (dataForm) => {
+		try {
+			await createUser(dataForm);
+			toast.success('Registro exitoso');
+			reset();
+			navigate('/login');
+		} catch (error) {
+			toast.error('Error al registrarse. Por favor, intenta nuevamente');
+		}
 	};
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className="mb-4">
-				<label className="block font-semibold "> First Name </label>
+				<label className="block font-semibold">First Name</label>
 				<input
-					placeholder="first Name"
-					className="input form"
+					placeholder="first name"
+					className="input-form"
 					{...register('firstName')}
 				/>
-
 				{errors.firstName && (
 					<p className="error-validation">{errors.firstName.message}</p>
 				)}
 			</div>
 
 			<div className="mb-4">
-				<label className="block font-semibold "> Last Name </label>
+				<label className="block font-semibold">Last Name</label>
 				<input
-					placeholder="last Name"
-					className="input form"
+					placeholder="last name"
+					className="input-form"
 					{...register('lastName')}
 				/>
-
 				{errors.lastName && (
 					<p className="error-validation">{errors.lastName.message}</p>
 				)}
 			</div>
 
 			<div className="mb-4">
-				<label className="block font-semibold "> Email </label>
+				<label className="block font-semibold">Email</label>
 				<input
 					placeholder="email"
-					className="input form"
+					className="input-form"
 					{...register('email')}
 				/>
-
 				{errors.email && (
 					<p className="error-validation">{errors.email.message}</p>
 				)}
 			</div>
 
 			<div className="mb-4">
-				<label className="block font-semibold ">Password</label>
+				<label className="block font-semibold">Password</label>
 				<input
 					type="password"
-					placeholder="password"
+					placeholder="Ingresa tu password"
 					className="input-form"
 					{...register('password')}
 				/>
 				{errors.password && (
-					<p className="error-validation block my-4">
-						{errors.password.message}
-					</p>
+					<p className="error-validation">{errors.password.message}</p>
 				)}
 			</div>
 
@@ -90,11 +102,12 @@ function RegisterForm() {
 					<option value="female">Female</option>
 					<option value="other">Other</option>
 				</select>
-				{errors.gender && (
-					<span className="error-validation">{errors.gender.message}</span>
+				{errors.genre && (
+					<p className="error-validation">{errors.genre.message}</p>
 				)}
 			</div>
-			<button className="btn w-full">Create an account</button>
+
+			<button className="btn w-full">Registrarse</button>
 		</form>
 	);
 }

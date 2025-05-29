@@ -3,7 +3,6 @@ import useApiFetch from '../../hooks/useApiFetch';
 import ReviewsList from './ReviewsList';
 
 function Reviews({ hotelId }) {
-	// review?hotelId=1
 	const [reviews, setReviews] = useApiFetch();
 
 	useEffect(() => {
@@ -13,6 +12,7 @@ function Reviews({ hotelId }) {
 			});
 		}
 	}, [hotelId]);
+
 	return (
 		<div>
 			<h3 className="text-2xl font-semibold text-center mb-4">Reviews</h3>

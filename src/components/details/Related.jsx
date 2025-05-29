@@ -1,16 +1,15 @@
-import { useEffect } from 'react';
+import React from 'react';
 import useApiFetch from '../../hooks/useApiFetch';
+import { useEffect } from 'react';
 import RelatedList from './RelatedList';
 
 function Related({ cityId, hotelId }) {
 	const [related, getRelateds] = useApiFetch();
 
 	useEffect(() => {
-		if (cityId) {
-			getRelateds({
-				url: `/hotels?cityId=${cityId}`,
-			});
-		}
+		getRelateds({
+			url: `/hotels?cityId=${cityId}`,
+		});
 	}, [cityId]);
 
 	const filtered = related.filter((hotel) => hotel.id !== hotelId);

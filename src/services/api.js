@@ -1,16 +1,22 @@
 import axios from 'axios';
 
 const ls = window.localStorage;
-const api = axios.create({
+
+const apiInstance = axios.create({
 	baseURL: 'https://hotels-api.academlo.tech',
 });
-api.interceptors.request.use(
+
+apiInstance.interceptors.request.use(
 	(config) => {
 		const token = ls.getItem('token');
-
-		if (token) config.headers.Authorization = `Bearer ${token}`;
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
 		return config;
 	},
-	(error) => Promise.reject(error),
+	(error) => {
+		return Promise.reject(error);
+	},
 );
-export default api;
+
+export default apiInstance;

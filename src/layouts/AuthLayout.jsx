@@ -1,5 +1,6 @@
+import React from 'react';
 import { Outlet } from 'react-router';
-import Brand from '../components/Brand';
+import Brand from '../components/home/Brand';
 
 function AuthLayout() {
 	return (

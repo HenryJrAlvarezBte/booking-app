@@ -2,12 +2,13 @@ import { useState } from 'react';
 import ReviewCard from './ReviewCard';
 
 function ReviewsList({ reviews }) {
-	const [visibleReviews, setVibleReviews] = useState(5);
+	const [visibleReviews, setVisibleReviews] = useState(5);
 	const loadMoreIncrement = 5;
 
 	const loadMore = () => {
-		setVibleReviews(visibleReviews + loadMoreIncrement);
+		setVisibleReviews((prev) => prev + loadMoreIncrement);
 	};
+
 	return (
 		<div>
 			<div className="mb-4">
@@ -15,6 +16,7 @@ function ReviewsList({ reviews }) {
 					<ReviewCard key={review?.id} review={review} />
 				))}
 			</div>
+
 			{visibleReviews < reviews?.length && (
 				<div className="flex justify-center">
 					<button className="btn" onClick={loadMore}>
@@ -24,7 +26,7 @@ function ReviewsList({ reviews }) {
 			)}
 
 			{reviews?.length === 0 && (
-				<p className="font-semibold text-center">No review yet.</p>
+				<p className="font-semibold text-center">No reviews yet.</p>
 			)}
 		</div>
 	);

@@ -1,10 +1,13 @@
-import { Navigate, Outlet } from 'react-router';
+import React from 'react';
 import { useAuth } from '../context/auth';
+import { Reservations } from '../app';
 
 function Protected({ children }) {
 	const { isAuth } = useAuth();
 
-	if (!isAuth) return <Navigate to="/login" />;
+	if (isAuth) {
+		return <Reservations />;
+	}
 	return children ? children : <Outlet />;
 }
 

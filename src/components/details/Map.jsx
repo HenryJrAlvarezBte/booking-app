@@ -1,5 +1,8 @@
+import React from 'react';
+
 function Map({ lat, lon }) {
 	const zoom = 15;
+
 	return (
 		<div className="aspect-square rounded-lg overflow-hidden">
 			{/* src="//maps.google.com/maps?q=[latitude],[longitude]&z=[zoom]&output=embed" */}
